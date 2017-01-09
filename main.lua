@@ -3,9 +3,10 @@
 --TODO: Lock keyboard so I don't change spaces
 --TODO: Add explosions
 --TODO: background Image (maybe scrolling?)
---TODO: Improve death.  Show score, and a you died on separate background.
---DONE: stop enemy spawn on death
+--TODO: Display score on death.
+--DONE: stop enemy spawn on death.
 --DONE: stop firing after death.
+--TODO: Fix spawning of enemies off screen
 
 
 -- Collision detection taken function from http://love2d.org/wiki/BoundingBox.lua
