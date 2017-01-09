@@ -3,7 +3,7 @@
 --TODO: Lock keyboard so I don't change spaces
 --TODO: Add explosions
 --TODO: background Image (maybe scrolling?)
---TODO: Display score on death.
+--DONE: Display score on death.
 --DONE: stop enemy spawn on death.
 --DONE: stop firing after death.
 --TODO: Fix spawning of enemies off screen
@@ -148,7 +148,10 @@ end
 function love.draw(dt)
   if isAlive then
     love.graphics.draw(player.img, player.x, player.y)
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.print("SCORE: " .. tostring(score), 400, 10)
   else
+    love.graphics.print("Your Score: " .. tostring(score), love.graphics:getWidth()/2-40, love.graphics:getHeight()/2-25)
     love.graphics.print("Press 'R' to restart", love.graphics:getWidth()/2-50, love.graphics:getHeight()/2-10)
   end
   for i, bullet in ipairs(bullets) do
@@ -157,6 +160,4 @@ function love.draw(dt)
   for i, enemy in ipairs(enemies) do
     love.graphics.draw(enemy.img, enemy.x, enemy.y)
   end
-  love.graphics.setColor(255, 255, 255)
-love.graphics.print("SCORE: " .. tostring(score), 400, 10)
 end
