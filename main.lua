@@ -7,6 +7,7 @@
 --DONE: stop enemy spawn on death.
 --DONE: stop firing after death.
 --TODO: Fix spawning of enemies off screen
+--TODO: Store high score.  (Bonus store through multiple games)
 
 
 -- Collision detection taken function from http://love2d.org/wiki/BoundingBox.lua
