@@ -10,7 +10,7 @@
 --TODO: Store high score.  (Bonus store through multiple games)
 --TODO: Allow enemies to shoot background
 --DONE: Add sound effects
---TODO: Improve sound effects (allow playing over each other)
+--DONE: Improve sound effects (allow playing over each other)
 require 'slam'
 
 
