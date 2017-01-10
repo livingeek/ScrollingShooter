@@ -11,7 +11,7 @@
 --TODO: Allow enemies to shoot background
 --DONE: Add sound effects
 --TODO: Improve sound effects (allow playing over each other)
-
+require 'slam'
 
 
 -- Collision detection taken function from http://love2d.org/wiki/BoundingBox.lua
@@ -107,7 +107,7 @@ function love.update(dt)
     -- Create some bullets
     newBullet = {x = player.x + (player.img:getWidth()/2), y = player.y, img = bulletImg }
     table.insert(bullets, newBullet)
-    firingSound:play()
+    local firing = firingSound:play()
     canShoot = false
     canShootTimer = canShootTimerMax
   end
@@ -146,14 +146,14 @@ function love.update(dt)
         table.remove(bullets, j)
         --TODO: this would be a good place to replace image, and add attribute for removal after x time.
         table.remove(enemies, i)
-        explosionSound:play()
+        local explosion = explosionSound:play()
         score = score + 1
       end
     end
 
     if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth(), enemy.img:getHeight(), player.x, player.y, player.img:getWidth(), player.img:getHeight()) then
       table.remove(enemies, i)
-      explosionSound:play()
+      local explosion = explosionSound:play()
       isAlive = false
     end
   end
