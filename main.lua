@@ -40,6 +40,7 @@ createEnemyTimer = createEnemyTimerMax
 -- Image Storage
 bulletImg = nil
 enemyImg = nil
+explosionImg = nil
 explosionSound = nil
 firingSound = nil
 
@@ -51,6 +52,7 @@ function love.load(arg)
   player.img = love.graphics.newImage('assets/plane.png')
   bulletImg = love.graphics.newImage('assets/bullet.png')
   enemyImg = love.graphics.newImage('assets/enemy.png')
+  explosionImg = love.graphics.newImage('assets/explosion.png')
   explosionSound = love.audio.newSource('assets/audio/explosion.wav', 'static')
   firingSound = love.audio.newSource('assets/audio/shoot.wav', 'static')
 
@@ -86,15 +88,18 @@ function love.update(dt)
     if player.x > 0 then
       player.x = player.x - (player.speed*dt)
     end
-  elseif love.keyboard.isDown('right','d') then
+  end
+  if love.keyboard.isDown('right','d') then
     if player.x < (love.graphics.getWidth() - player.img:getWidth()) then
       player.x = player.x + (player.speed*dt)
     end
-  elseif love.keyboard.isDown('up','w') then
+  end
+  if love.keyboard.isDown('up','w') then
     if player.y > 580 then
       player.y = player.y - (player.speed*dt)
     end
-  elseif love.keyboard.isDown('down','s') then
+  end
+  if love.keyboard.isDown('down','s') then
     if player.y < (love.graphics.getHeight() - player.img:getHeight()) then
       player.y = player.y + (player.speed*dt)
     end
@@ -127,7 +132,7 @@ function love.update(dt)
 
     --Create an enemy
     randomNumber = math.random(10, love.graphics.getWidth() - 10)
-    newEnemy = { x = randomNumber, y = -10, img = enemyImg }
+    newEnemy = { x = randomNumber, y = -10, img = enemyImg, alive = true }
     table.insert(enemies, newEnemy)
   end
   for i, enemy in ipairs(enemies) do
@@ -142,12 +147,15 @@ function love.update(dt)
   -- Also, we need to see if the enemies hit our player
   for i, enemy in ipairs(enemies) do
     for j, bullet in ipairs(bullets) do
-      if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth(), enemy.img:getHeight(), bullet.x, bullet.y, bullet.img:getWidth(), bullet.img:getHeight()) then
+      if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth(), enemy.img:getHeight(), bullet.x, bullet.y, bullet.img:getWidth(), bullet.img:getHeight()) and enemy.alive then
         table.remove(bullets, j)
-        --TODO: this would be a good place to replace image, and add attribute for removal after x time.
-        table.remove(enemies, i)
+        enemy.img = explosionImg
+        enemy.alive = false
+        --table.remove(enemies, i)
         local explosion = explosionSound:play()
         score = score + 1
+      elseif enemy.alive==false then
+        table.remove(enemies, i)
       end
     end
 
