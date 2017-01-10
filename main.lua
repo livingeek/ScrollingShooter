@@ -9,7 +9,9 @@
 --TODO: Fix spawning of enemies off screen
 --TODO: Store high score.  (Bonus store through multiple games)
 --TODO: Allow enemies to shoot background
---TODO: Add sound effects
+--DONE: Add sound effects
+--TODO: Improve sound effects (allow playing over each other)
+
 
 
 -- Collision detection taken function from http://love2d.org/wiki/BoundingBox.lua
@@ -38,6 +40,8 @@ createEnemyTimer = createEnemyTimerMax
 -- Image Storage
 bulletImg = nil
 enemyImg = nil
+explosionSound = nil
+firingSound = nil
 
 --Entity Storage
 bullets = {} -- array of current bullets being drawn and updated
@@ -47,6 +51,10 @@ function love.load(arg)
   player.img = love.graphics.newImage('assets/plane.png')
   bulletImg = love.graphics.newImage('assets/bullet.png')
   enemyImg = love.graphics.newImage('assets/enemy.png')
+  explosionSound = love.audio.newSource('assets/audio/explosion.wav', 'static')
+  firingSound = love.audio.newSource('assets/audio/shoot.wav', 'static')
+
+
   --we now have an asset ready to be used inside love
 end
 
@@ -99,6 +107,7 @@ function love.update(dt)
     -- Create some bullets
     newBullet = {x = player.x + (player.img:getWidth()/2), y = player.y, img = bulletImg }
     table.insert(bullets, newBullet)
+    firingSound:play()
     canShoot = false
     canShootTimer = canShootTimerMax
   end
@@ -137,12 +146,14 @@ function love.update(dt)
         table.remove(bullets, j)
         --TODO: this would be a good place to replace image, and add attribute for removal after x time.
         table.remove(enemies, i)
+        explosionSound:play()
         score = score + 1
       end
     end
 
     if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth(), enemy.img:getHeight(), player.x, player.y, player.img:getWidth(), player.img:getHeight()) then
       table.remove(enemies, i)
+      explosionSound:play()
       isAlive = false
     end
   end
