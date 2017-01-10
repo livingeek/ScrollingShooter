@@ -1,5 +1,4 @@
---TODO: Allow for multiple key inputs
---TODO: Allow for diagonal movement
+--DONE: Allow for diagonal movement
 --TODO: Lock keyboard so I don't change spaces
 --TODO: Add explosions
 --TODO: background Image (maybe scrolling?)
