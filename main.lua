@@ -5,9 +5,9 @@
 --DONE: Display score on death.
 --DONE: stop enemy spawn on death.
 --DONE: stop firing after death.
---TODO: Fix spawning of enemies off screen
+--DONE: Fix spawning of enemies off screen
 --TODO: Store high score.  (Bonus store through multiple games)
---TODO: Allow enemies to shoot background
+--TODO: Allow enemies to shoot back
 --DONE: Add sound effects
 --DONE: Improve sound effects (allow playing over each other)
 require 'slam'
@@ -130,7 +130,7 @@ function love.update(dt)
     createEnemyTimer = createEnemyTimerMax
 
     --Create an enemy
-    randomNumber = math.random(10, love.graphics.getWidth() - 10)
+    randomNumber = math.random(10, love.graphics.getWidth() - enemyImg:getWidth())
     newEnemy = { x = randomNumber, y = -10, img = enemyImg, alive = true }
     table.insert(enemies, newEnemy)
   end
