@@ -10,7 +10,7 @@
 --DONE: Allow enemies to shoot back
 --DONE: Add sound effects
 --DONE: Improve sound effects (allow playing over each other)
---TODO: Center shots fired on the planes better. 
+--DONE: Center shots fired on the planes better.
 require 'slam'
 
 
@@ -115,7 +115,8 @@ function love.update(dt)
   end
   if love.keyboard.isDown(' ', 'space', 'rctrl', 'lctrl', 'ctrl') and canShoot and isAlive then
     -- Create some bullets
-    newBullet = {x = player.x + (player.img:getWidth()/2), y = player.y, img = bulletImg }
+    -- Subtract 5 on x to center bullet on aircraft
+    newBullet = {x = player.x + (player.img:getWidth()/2) - 5, y = player.y, img = bulletImg }
     table.insert(bullets, newBullet)
     local firing = firingSound:play()
     canShoot = false
@@ -160,13 +161,14 @@ function love.update(dt)
     newEnemy = { x = randomNumber, y = -10, img = enemyImg, alive = true, enemyShootTimer = randomNumber + 0.5 }
     table.insert(enemies, newEnemy)
   end
+  -- Move enemy and check if enemy can shoot
   for i, enemy in ipairs(enemies) do
     enemy.y = enemy.y + (200 * dt)
 
     enemy.enemyShootTimer = enemy.enemyShootTimer - (1 * dt)
     if enemy.enemyShootTimer < 0 then
-      -- Minus 3 added to the division to center the bullet unsure why a divide by 2 was off by that amount.
-      newEnemyBullet = {x = enemy.x + enemy.img:getWidth()/2 - 3, y = enemy.y + enemy.img:getHeight(), img = enemyBullet }
+      -- Subtract 5 on x to center bullet on aircraft
+      newEnemyBullet = {x = enemy.x + enemy.img:getWidth()/2 - 5, y = enemy.y + enemy.img:getHeight(), img = enemyBullet }
       table.insert(enemyBullets, newEnemyBullet)
       local firing = firingSound:play()
       enemy.enemyShootTimer = enemyShootTimerMax
