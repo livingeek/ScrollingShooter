@@ -12,7 +12,7 @@
 --DONE: Improve sound effects (allow playing over each other)
 --DONE: Center shots fired on the planes better.
 --TODO: PLay with enemy bullet speed to make game slightly easier.
---TODO: Add menu to select difficulty.  Difficulty will change plane and bullet speeds. 
+--TODO: Add menu to select difficulty.  Difficulty will change plane and bullet speeds.
 require 'slam'
 
 
@@ -136,7 +136,7 @@ function love.update(dt)
 
   --Tracking of bullets that have been fired by enemies.
   for i, enemyBullet in ipairs(enemyBullets) do
-    enemyBullet.y = enemyBullet.y + (500 * dt)
+    enemyBullet.y = enemyBullet.y + (300 * dt)
 
     if enemyBullet.y > love.graphics.getHeight() then
       table.remove(enemyBullets, i)
