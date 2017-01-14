@@ -11,6 +11,8 @@
 --DONE: Add sound effects
 --DONE: Improve sound effects (allow playing over each other)
 --DONE: Center shots fired on the planes better.
+--TODO: PLay with enemy bullet speed to make game slightly easier.
+--TODO: Add menu to select difficulty.  Difficulty will change plane and bullet speeds. 
 require 'slam'
 
 
