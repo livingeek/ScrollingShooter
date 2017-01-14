@@ -13,6 +13,8 @@
 --DONE: Center shots fired on the planes better.
 --TODO: PLay with enemy bullet speed to make game slightly easier.
 --TODO: Add menu to select difficulty.  Difficulty will change plane and bullet speeds.
+--TODO: Stop enemies from shooting after player has died. 
+
 require 'slam'
 
 
