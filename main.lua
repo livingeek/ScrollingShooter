@@ -187,9 +187,9 @@ function love.update(dt)
     for j, bullet in ipairs(bullets) do
       if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth(), enemy.img:getHeight(), bullet.x, bullet.y, bullet.img:getWidth(), bullet.img:getHeight()) and enemy.alive then
         table.remove(bullets, j)
-        enemy.img = explosionImg
+        --enemy.img = explosionImg
         enemy.alive = false
-        --table.remove(enemies, i)
+        table.remove(enemies, i)
         local explosion = explosionSound:play()
         score = score + 1
       elseif enemy.alive==false then
