@@ -7,9 +7,10 @@
 --DONE: stop firing after death.
 --DONE: Fix spawning of enemies off screen
 --TODO: Store high score.  (Bonus store through multiple games)
---TODO: Allow enemies to shoot back
+--DONE: Allow enemies to shoot back
 --DONE: Add sound effects
 --DONE: Improve sound effects (allow playing over each other)
+--TODO: Center shots fired on the planes better. 
 require 'slam'
 
 
@@ -33,12 +34,14 @@ canShoot = true
 canShootTimerMax = 0.2
 canShootTimer = canShootTimerMax
 --Enemy variables
-createEnemyTimerMax = 0.4
+createEnemyTimerMax = 2.0
 createEnemyTimer = createEnemyTimerMax
+enemyShootTimerMax = 1.0
 
 -- Image Storage
 bulletImg = nil
 enemyImg = nil
+enemyBullet = nil
 explosionImg = nil
 explosionSound = nil
 firingSound = nil
@@ -46,11 +49,13 @@ firingSound = nil
 --Entity Storage
 bullets = {} -- array of current bullets being drawn and updated
 enemies = {} -- array of current enemies
+enemyBullets = {} -- array of current enemy bullets
 
 function love.load(arg)
   player.img = love.graphics.newImage('assets/plane.png')
   bulletImg = love.graphics.newImage('assets/bullet.png')
   enemyImg = love.graphics.newImage('assets/enemy.png')
+  enemyBullet = love.graphics.newImage('assets/enemyBullet.png')
   explosionImg = love.graphics.newImage('assets/explosion.png')
   explosionSound = love.audio.newSource('assets/audio/explosion.wav', 'static')
   firingSound = love.audio.newSource('assets/audio/shoot.wav', 'static')
@@ -64,6 +69,7 @@ function love.update(dt)
     -- remove all our bullets and enemies from screen
     bullets = {}
     enemies = {}
+    enemyBullets = {}
 
     -- reset timers
     canShootTimer = canShootTimerMax
@@ -124,6 +130,21 @@ function love.update(dt)
       table.remove(bullets, i)
     end
   end
+
+  --Tracking of bullets that have been fired by enemies.
+  for i, enemyBullet in ipairs(enemyBullets) do
+    enemyBullet.y = enemyBullet.y + (500 * dt)
+
+    if enemyBullet.y > love.graphics.getHeight() then
+      table.remove(enemyBullets, i)
+    end
+
+    if CheckCollision(enemyBullet.x, enemyBullet.y, enemyBullet.img:getWidth(), enemyBullet.img:getHeight(), player.x, player.y, player.img:getWidth(), player.img:getHeight()) then
+      table.remove(enemyBullets, i)
+      local explosion = explosionSound:play()
+      isAlive = false
+    end
+  end
   --Time out enemy creation
   createEnemyTimer = createEnemyTimer - (1 * dt)
   if createEnemyTimer < 0 and isAlive then
@@ -131,11 +152,25 @@ function love.update(dt)
 
     --Create an enemy
     randomNumber = math.random(10, love.graphics.getWidth() - enemyImg:getWidth())
-    newEnemy = { x = randomNumber, y = -10, img = enemyImg, alive = true }
+    math.randomseed(os.time())
+    randomNumber = math.random() * (.9 - .1) + .1
+    digits = 1
+    shift = 10 ^ 1
+    randomNumber = math.floor(randomNumber*shift + 0.5) / shift
+    newEnemy = { x = randomNumber, y = -10, img = enemyImg, alive = true, enemyShootTimer = randomNumber + 0.5 }
     table.insert(enemies, newEnemy)
   end
   for i, enemy in ipairs(enemies) do
     enemy.y = enemy.y + (200 * dt)
+
+    enemy.enemyShootTimer = enemy.enemyShootTimer - (1 * dt)
+    if enemy.enemyShootTimer < 0 then
+      -- Minus 3 added to the division to center the bullet unsure why a divide by 2 was off by that amount.
+      newEnemyBullet = {x = enemy.x + enemy.img:getWidth()/2 - 3, y = enemy.y + enemy.img:getHeight(), img = enemyBullet }
+      table.insert(enemyBullets, newEnemyBullet)
+      local firing = firingSound:play()
+      enemy.enemyShootTimer = enemyShootTimerMax
+    end
 
     if enemy.y > 850 then -- removes when they pass off the screen
       table.remove(enemies, i)
@@ -177,6 +212,9 @@ function love.draw(dt)
   end
   for i, bullet in ipairs(bullets) do
     love.graphics.draw(bullet.img, bullet.x, bullet.y)
+  end
+  for i, enemyBullet in ipairs(enemyBullets) do
+    love.graphics.draw(enemyBullet.img, enemyBullet.x, enemyBullet.y)
   end
   for i, enemy in ipairs(enemies) do
     love.graphics.draw(enemy.img, enemy.x, enemy.y)
