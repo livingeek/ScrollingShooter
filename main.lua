@@ -154,13 +154,14 @@ function love.update(dt)
     createEnemyTimer = createEnemyTimerMax
 
     --Create an enemy
+    math.randomseed(os.time())
     randomNumber = math.random(10, love.graphics.getWidth() - enemyImg:getWidth())
     math.randomseed(os.time())
-    randomNumber = math.random() * (.9 - .1) + .1
+    randomBulletTime = math.random() * (.9 - .1) + .1
     digits = 1
     shift = 10 ^ 1
     randomNumber = math.floor(randomNumber*shift + 0.5) / shift
-    newEnemy = { x = randomNumber, y = -10, img = enemyImg, alive = true, enemyShootTimer = randomNumber + 0.5 }
+    newEnemy = { x = randomNumber, y = -10, img = enemyImg, alive = true, enemyShootTimer = randomBulletTime + 0.5 }
     table.insert(enemies, newEnemy)
   end
   -- Move enemy and check if enemy can shoot
