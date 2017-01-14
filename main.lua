@@ -13,7 +13,7 @@
 --DONE: Center shots fired on the planes better.
 --TODO: PLay with enemy bullet speed to make game slightly easier.
 --TODO: Add menu to select difficulty.  Difficulty will change plane and bullet speeds.
---TODO: Stop enemies from shooting after player has died. 
+--DONE: Stop enemies from shooting after player has died.
 
 require 'slam'
 
@@ -171,7 +171,7 @@ function love.update(dt)
     enemy.y = enemy.y + (200 * dt)
 
     enemy.enemyShootTimer = enemy.enemyShootTimer - (1 * dt)
-    if enemy.enemyShootTimer < 0 then
+    if enemy.enemyShootTimer < 0 and isAlive then
       -- Subtract 5 on x to center bullet on aircraft
       newEnemyBullet = {x = enemy.x + enemy.img:getWidth()/2 - 5, y = enemy.y + enemy.img:getHeight(), img = enemyBullet }
       table.insert(enemyBullets, newEnemyBullet)
